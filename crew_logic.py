@@ -51,13 +51,12 @@ def create_crew(topico):
     llm = 'gpt-4o-mini'
 
     # Ferramenta de busca na web
-    search = GoogleSerperAPIWrapper()
+    search = GoogleSerperAPIWrapper(k=50)  # k é o número de resultados
     search_tool = Tool(
         name="Serper Search",
         func=search.run,
         description="Search the internet for information about a topic."
     )
-    search_tool.n_results = 50
 
     # Agente Pesquisador
     pesquisador = Agent(
