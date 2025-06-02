@@ -1,5 +1,5 @@
 from crewai import Agent, Task, Crew, Process
-from crewai.tools import SerperDevTool
+from crewai_tools import SerperDevTool
 from dotenv import load_dotenv
 import os
 import json
