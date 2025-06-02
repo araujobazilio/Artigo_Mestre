@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: artigo-mestre
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "streamlit run app_streamlit.py"
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      # Adicione outras variáveis de ambiente conforme necessário
