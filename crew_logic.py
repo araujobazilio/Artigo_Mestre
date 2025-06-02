@@ -1,13 +1,12 @@
 from crewai import Agent, Task, Crew, Process
-from crewai.tools import SerperDevTool
 from dotenv import load_dotenv
 import os
 import json
 from datetime import datetime
 from pathlib import Path
-
 import unicodedata
 import re
+import requests
 
 def sanitize_filename(text):
     # Remove acentos
@@ -38,18 +37,38 @@ def save_articles(topico, result):
     
     return filename
 
+def search_web(query, api_key):
+    """Função para buscar na web usando a API do Serper"""
+    url = "https://google.serper.dev/search"
+    headers = {
+        'X-API-KEY': api_key,
+        'Content-Type': 'application/json'
+    }
+    payload = json.dumps({
+        "q": query,
+        "num": 5  # Número de resultados
+    })
+    try:
+        response = requests.post(url, headers=headers, data=payload)
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        return f"Erro na busca: {str(e)}"
+
 def create_crew(topico):
     """
     Cria e configura o crew de agentes
     """
     # Carregar variáveis de ambiente
     load_dotenv()
+    serper_api_key = os.getenv('SERPER_API_KEY')
 
     # Definir modelo de IA
     llm = 'gpt-4o-mini'
 
-    # Ferramenta de busca na web
-    search_tool = SerperDevTool()
+    # Função wrapper para busca na web
+    def search_wrapper(query):
+        return search_web(query, serper_api_key)
 
     # Agente Pesquisador
     pesquisador = Agent(
@@ -59,10 +78,9 @@ def create_crew(topico):
             "avançados, periódicos científicos e repositórios de informações confiáveis."
         ),
         goal="Coletar e organizar artigos recentes sobre um tema específico.",
-        tools=[search_tool],
+        tools=[search_wrapper],
         verbose=True,
-        llm=llm,
-        
+        llm=llm
     )
 
     # Agente Analista
