@@ -63,7 +63,7 @@ def create_crew(topico):
         tools=[search_tool],
         verbose=True,
         llm=llm,
-        memory=True
+        
     )
 
     # Agente Analista
@@ -75,7 +75,7 @@ def create_crew(topico):
         goal="Analisar os artigos encontrados e extrair insights.",
         verbose=True,
         llm=llm,
-        memory=True
+        
     )
 
     # Agente Redator
@@ -87,7 +87,7 @@ def create_crew(topico):
         goal="Escrever 5 artigos científicos profundos baseados nos insights.",
         verbose=True,
         llm=llm,
-        memory=True
+        
     )
 
     # Agente Revisor
@@ -99,7 +99,7 @@ def create_crew(topico):
         goal="Revisar e aprimorar os artigos científicos.",
         verbose=True,
         llm=llm,
-        memory=True
+        
     )
 
     # Tarefas
@@ -140,7 +140,7 @@ def create_crew(topico):
         agents=[pesquisador, analista, redator, revisor],
         tasks=[pesquisa_task, analise_task, criacao_artigos_task, revisao_task],
         process=Process.sequential,
-        memory=True
+        
     )
 
     return crew
