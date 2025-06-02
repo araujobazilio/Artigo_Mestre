@@ -1,7 +1,6 @@
 # Updated imports for new crewai version
 from crewai import Agent, Task, Crew, Process
-from langchain.tools import Tool
-from langchain_community.utilities import GoogleSerperAPIWrapper
+from langchain_community.tools.google_serper import GoogleSerperSearchResults
 from dotenv import load_dotenv
 import os
 import json
@@ -51,12 +50,9 @@ def create_crew(topico):
     llm = 'gpt-4o-mini'
 
     # Ferramenta de busca na web
-    search = GoogleSerperAPIWrapper(k=50)  # k é o número de resultados
-    search_tool = Tool(
-        name="Serper Search",
-        func=search.run,
-        description="Search the internet for information about a topic."
-    )
+    search_tool = GoogleSerperSearchResults()
+    # Configurar para retornar mais resultados
+    search_tool.kwargs['num_results'] = 50
 
     # Agente Pesquisador
     pesquisador = Agent(
