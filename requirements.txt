@@ -2,4 +2,4 @@ crewai
 python-dotenv
 crewai-tools
 streamlit
-webbrowser
+
