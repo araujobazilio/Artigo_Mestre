@@ -1,0 +1,48 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+    Resultado - Gerador de Artigos
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4 text-center">Artigos Gerados: {{ topico }}</h1>
+            
+            {% for artigo in artigos %}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <pre class="text-wrap">{{ artigo }}</pre>
+                </div>
+            </div>
+            {% endfor %}
+            
+            <div class="text-center mt-4">
+                <a href="{{ url_for('index') }}" class="btn btn-primary">
+                    Gerar Novos Artigos
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+        .panel {
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+        }
+    </style>
+{% endblock %}

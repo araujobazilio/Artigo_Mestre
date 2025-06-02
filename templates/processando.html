@@ -1,0 +1,105 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+    Processando Artigos - {{ topico }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="panel panel-primary">
+                <div class="panel-heading text-center">
+                    <h2>Gerando Artigos</h2>
+                </div>
+                <div class="panel-body text-center">
+                    <h3>Tópico: {{ topico }}</h3>
+                    
+                    <div id="progresso-container" class="mt-4">
+                        <h4>Progresso dos Agentes:</h4>
+                        <div id="progresso-lista" class="list-group">
+                            <!-- Progresso será preenchido via JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div id="resultado-container" class="mt-4" style="display: none;">
+                        <div class="alert alert-success">
+                            <h4>Artigos Gerados com Sucesso!</h4>
+                            <a href="#" id="download-link" class="btn btn-primary">
+                                Baixar Artigos
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        function atualizarProgresso() {
+            fetch('/progresso')
+                .then(response => response.json())
+                .then(data => {
+                    const progressoLista = document.getElementById('progresso-lista');
+                    progressoLista.innerHTML = '';
+                    
+                    data.forEach(item => {
+                        const div = document.createElement('div');
+                        div.classList.add('list-group-item');
+                        div.innerHTML = `
+                            <strong>${item.agent}:</strong> 
+                            <span>${item.status}</span>
+                            <small class="text-muted ml-2">${item.timestamp}</small>
+                        `;
+                        progressoLista.appendChild(div);
+                    });
+                });
+        }
+
+        function verificarStatusArtigo() {
+            fetch('/status_artigo')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'concluido') {
+                        const resultadoContainer = document.getElementById('resultado-container');
+                        const downloadLink = document.getElementById('download-link');
+                        
+                        resultadoContainer.style.display = 'block';
+                        downloadLink.href = `/download_artigo/${data.filename}`;
+                    } else {
+                        setTimeout(verificarStatusArtigo, 2000);
+                    }
+                });
+        }
+
+        // Atualizar progresso a cada 2 segundos
+        setInterval(atualizarProgresso, 2000);
+        
+        // Verificar status dos artigos
+        verificarStatusArtigo();
+    </script>
+{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+        .panel {
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .panel-heading {
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            color: white !important;
+            background-color: #007bff !important;
+            padding: 15px;
+        }
+    </style>
+{% endblock %}
