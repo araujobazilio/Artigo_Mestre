@@ -1,7 +1,7 @@
 # Updated imports for new crewai version
 from crewai import Agent, Task, Crew, Process
 from langchain.tools import Tool
-from langchain.utilities import GoogleSerperAPIWrapper
+from langchain_community.utilities import GoogleSerperAPIWrapper
 from dotenv import load_dotenv
 import os
 import json

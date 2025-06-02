@@ -2,4 +2,5 @@ crewai>=0.14.0
 python-dotenv
 streamlit
 langchain
+langchain-community
 google-search-results
