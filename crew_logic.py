@@ -1,4 +1,4 @@
-from crewai import Agent, Task, Crew, Process, Tool
+from crewai import Agent, Task, Crew, Process
 from dotenv import load_dotenv
 import os
 import json
@@ -67,11 +67,10 @@ def create_crew(topico):
     llm = 'gpt-4o-mini'
 
     # Criar ferramenta de busca utilizando a classe Tool do CrewAI
-    search_tool = Tool(
-        name="web_search",
-        description="Busca informações na internet usando o Google",
-        func=lambda query: search_web(query, serper_api_key)
-    )
+    # Criar uma função simples de busca
+    def search_web_tool(query):
+        """Busca informações na internet usando o Google Serper API"""
+        return search_web(query, serper_api_key)
 
     # Agente Pesquisador
     pesquisador = Agent(
@@ -81,7 +80,7 @@ def create_crew(topico):
             "avançados, periódicos científicos e repositórios de informações confiáveis."
         ),
         goal="Coletar e organizar artigos recentes sobre um tema específico.",
-        tools=[search_tool],
+        tools=[search_web_tool],
         verbose=True,
         llm=llm
     )
