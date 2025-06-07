@@ -2,3 +2,4 @@ crewai>=0.14.0
 python-dotenv
 streamlit
 requests
+langchain
